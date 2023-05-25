@@ -135,4 +135,45 @@ ALTER TABLE OrderDetails
 ADD CONSTRAINT orderDetails_productid_fkey FOREIGN KEY(productid) REFERENCES Product(id);
 
 
+-- 6/6
 
+-- List all possible combinations of Customer names and Product names that can be ordered from a specific customer
+SELECT c.name, p.name
+FROM Customer c
+JOIN "Order" o ON c.id = o.customerid
+JOIN orderDetails od ON o.id = od.orderid
+JOIN Product p ON od.productid= p.id
+WHERE c.name = 'Seavus'
+
+-- List all Business Entities that has any order
+SELECT  be.*
+FROM Businessentity be
+JOIN "Order" o ON be.id = o.businessentityid
+
+
+-- List all Business Entities without orders
+SELECT  be.*
+FROM Businessentity be
+LEFT JOIN "Order" o ON be.id = o.businessentityid
+WHERE o.businessentityid IS NULL
+
+-- List all Customers without orders (using Right Join and using Left join)
+SELECT c.* , o.customerid
+FROM Customer c
+LEFT JOIN "Order" o ON c.id = o.customerid
+WHERE o.customerid IS NULL
+
+
+SELECT c.name , o.customerid
+FROM Customer c
+RIGHT JOIN "Order" o ON c.id = o.customerid
+WHERE o.customerid IS NULL
+
+SELECT o.*
+FROM "Order"o 
+RIGHT JOIN Customer c ON o.customerid = o.id
+WHERE o.customerid IS NULL
+
+UPDATE "Order" 
+SET customerid = NULL
+WHERE customerid = 7;
